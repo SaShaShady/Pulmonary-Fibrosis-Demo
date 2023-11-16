@@ -170,7 +170,13 @@ show_first_n_images(selected_patient,train_dir)
 # Show pydicom image statistics
 def load_scan(path):
     slices = [pydicom.read_file(os.path.join(path, s)) for s in os.listdir(path)]
+    
+    # Check if slices have the required attribute
+    slices = [s for s in slices if hasattr(s, 'ImagePositionPatient')]
+
+    # Sort slices based on the z-coordinate
     slices.sort(key=lambda x: float(x.ImagePositionPatient[2]))
+
     try:
         slice_thickness = np.abs(slices[0].ImagePositionPatient[2] - slices[1].ImagePositionPatient[2])
     except:
