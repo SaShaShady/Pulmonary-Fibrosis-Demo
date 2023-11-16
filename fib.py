@@ -18,11 +18,8 @@ import numpy as np
 import pydicom
 import streamlit as st
 import matplotlib.pyplot as plt
-# skimage image processing packages
+from skimage.morphology import disk, closing, binary_dilation
 from skimage import measure, morphology
-from skimage.morphology import ball, binary_closing
-from skimage.measure import label, regionprops
-import copy
 
 
 # Load the CSV file
@@ -127,8 +124,13 @@ st.altair_chart(scatter_plot, use_container_width=True)
 
 st.subheader("Pulmonary Fibrosis Patient Information")
 st.write("Now, let's dive into the image database. Let's have a look at the DICOM Images. Feel free to choose any patient ID from the dropdown to see tabular and image data along with some image statistics")
-train_dir = '/Users/sakshidoshi/Downloads/osic-pulmonary-fibrosis-progression (1)/train/'
-selected_patient = st.selectbox("Select a patient:", train_df['Patient'].unique())
+train_dir = './data'
+folder_names = [folder for folder in os.listdir(train_dir) if os.path.isdir(os.path.join(train_dir, folder))]
+
+# Show the folder names in the dropdown
+
+selected_patient = st.selectbox("Select a patient:", folder_names)
+#selected_patient = st.selectbox("Select a patient:", train_df['Patient'].unique())
 patient_info = train_df[train_df['Patient'] == selected_patient]
 
 st.write(patient_info)
@@ -229,7 +231,7 @@ def largest_label_volume(im, bg=-1):
 
 
 # Folder containing pydicom images
-dicom_folder = '/Users/sakshidoshi/Downloads/osic-pulmonary-fibrosis-progression (1)/train/'
+dicom_folder = './data'
 actual_path=os.path.join(dicom_folder, selected_patient)
 scans = load_scan(actual_path)
 scan_array = set_lungwin(get_pixels_hu(scans))
@@ -248,10 +250,10 @@ scan_array = set_lungwin(get_pixels_hu(scans))
 
 
 # Sidebar for lung segmentation parameters
-patient_ids = os.listdir('/Users/sakshidoshi/Downloads/osic-pulmonary-fibrosis-progression (1)/train/')
+patient_ids = os.listdir('./data')
 patient_id = 'ID00267637202270790561585'
-dicom_filenames = os.listdir('/Users/sakshidoshi/Downloads/osic-pulmonary-fibrosis-progression (1)/train/' + patient_id)
-dicom_paths = ['/Users/sakshidoshi/Downloads/osic-pulmonary-fibrosis-progression (1)/train/' + patient_id + '/'+ file for file in dicom_filenames]
+dicom_filenames = os.listdir('./data/' + patient_id)
+dicom_paths = ['./data/' + patient_id + '/'+ file for file in dicom_filenames]
     
 def load_scan(paths):
     slices = [pydicom.read_file(path ) for path in paths]
@@ -411,8 +413,6 @@ original = segmented_lungs_fill[46]
 # Streamlit app
 st.subheader("Morphological Operations")
 st.write("Now, let's look at the segmented part of the lung tissue frame by frame to understand segmentation on deeper level.")
-from skimage.morphology import disk, closing, binary_dilation
-from matplotlib.figure import Figure
 output_dir = 'processed_images'
 os.makedirs(output_dir, exist_ok=True)
 
