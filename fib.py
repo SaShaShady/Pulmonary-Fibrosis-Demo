@@ -13,7 +13,6 @@ import copy
 import imageio
 from scipy.ndimage.interpolation import zoom
 import pydicom as pydicom
-from IPython.display import Image
 import os
 import numpy as np
 import pydicom
