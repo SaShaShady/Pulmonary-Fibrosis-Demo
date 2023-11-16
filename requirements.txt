@@ -5,6 +5,6 @@ seaborn
 altair
 pydicom
 numpy
-skimage
+scikit-image
 imageio
 scipy
