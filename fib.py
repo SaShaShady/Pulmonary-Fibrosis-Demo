@@ -11,7 +11,7 @@ import random
 from skimage import measure
 import copy
 import imageio
-from scipy.ndimage.interpolation import zoom
+from scipy.ndimage import zoom
 import pydicom as pydicom
 import os
 import numpy as np
@@ -242,7 +242,7 @@ scan_array = set_lungwin(get_pixels_hu(scans))
 
 #     # Display the first image from the processed scans
 #     if len(scans) > 0:
-#         st.image(scan_array[0], use_column_width=True, channels='GRAY', caption="Processed pydicom Image")
+#         st.image(scan_array[0], use_container_width=True, channels='GRAY', caption="Processed pydicom Image")
 
 # Save processed images as a GIF
  
@@ -395,15 +395,15 @@ st.pyplot(fig)
 st.subheader("Everyone loves GIFs")
 st.write("Let's try to look at the images but with animated GIFs to understand them better.")
 imageio.mimsave("/tmp/gif.gif", scan_array, loop=4, duration = 0.3)
-st.image("/tmp/gif.gif", use_column_width=True)
+st.image("/tmp/gif.gif", use_container_width=True)
 
 st.subheader("Lung Segmentation Mask")
 
-st.image('./1.png',use_column_width=True)
+st.image('./1.png',use_container_width=True)
 
 st.subheader("Segmented Part of Lung Tissue")
 
-st.image('./2.png',use_column_width=True)
+st.image('./2.png',use_container_width=True)
 
 
 original_image = patient_pixels[46]
